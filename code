@@ -1,0 +1,401 @@
+#install packages
+install.packages("quanteda")
+install.packages("quanteda.corpora")
+install.packages("readtext")
+install.packages("spacyr")
+install.packages("ggplot2")
+require(quanteda)
+require(readtext)
+require(ggplot2)
+
+devtools::install_github("quanteda/quanteda.corpora")
+
+textplot_wordcloud(eu_dfm_text, rotation = 0.25,
+                   color = rev(RColorBrewer::brewer.pal(10, "RdBu")))
+
+
+#dictionary for British power
+power_dict_comp <- dictionary(list(hardpower = c("defen*", "hard power","peace", "war", "security", "royal navy", "armed forces", "NATO"),
+                                   softpower = c("positive role", "democracy", "pillar*", "international order", "commonwealth", "aid","reaches out", "WTO", "values", "liberal international order"),
+                                   future = c("explorers", "independent", "successful"), 
+                                   traits = c("confident", "pioneers", "explorers", "genius"),
+                                   history = c("churchill", "empire", "commonwealth", "conservative", "labour", "monnet", "schuman", "thatcher", "opportunit*", "past", "lesson", "teach", "repeat", "progress", "forgive")))
+                            
+test_dict_comp_results <- head(dfm(eu_corpus_text, dictionary = power_dict_comp))
+print(test_dict_comp_results)
+#uk1 
+uk1 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk1")
+View(uk1)
+docvarsuk1<-(uk1$doc_id)
+summary(docvarsuk1)
+#corpus from data uk1
+corp_text_uk1 <- corpus(uk1)
+summary(corp_text_uk1)
+#data cleaning and conversion to dfm uk1
+dfm_text_uk1 <- dfm(corp_text_uk1, remove_numbers = TRUE, 
+                stem = TRUE,
+                remove_punct = TRUE,
+                remove = stopwords("english"))
+summary(dfm_text_uk1)
+#apply dictionary to uk1
+uk1final <- head(dfm(corp_text_uk1, dictionary = power_dict_comp))
+print(uk1final)
+
+#uk2
+uk2 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk2")
+docvarsuk2<-(uk2$doc_id)
+corp_text_uk2 <- corpus(uk2)
+dfm_text_uk2 <- dfm(corp_text_uk2, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk2final <- head(dfm(corp_text_uk2, dictionary = power_dict_comp))
+
+#uk3
+uk3 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk3")
+docvarsuk3<-(uk3$doc_id)
+corp_text_uk3 <- corpus(uk3)
+dfm_text_uk3 <- dfm(corp_text_uk3, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk3final <- head(dfm(corp_text_uk3, dictionary = power_dict_comp))
+
+#uk4
+uk4 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk4")
+docvarsuk4<-(uk4$doc_id)
+corp_text_uk4 <- corpus(uk4)
+dfm_text_uk4 <- dfm(corp_text_uk4, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk4final <- head(dfm(corp_text_uk4, dictionary = power_dict_comp))
+
+#uk5
+uk5 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk5")
+docvarsuk5<-(uk5$doc_id)
+corp_text_uk5 <- corpus(uk5)
+dfm_text_uk5 <- dfm(corp_text_uk5, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk5final <- head(dfm(corp_text_uk5, dictionary = power_dict_comp))
+
+#uk6
+uk6 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk6")
+docvarsuk6<-(uk6$doc_id)
+corp_text_uk6 <- corpus(uk6)
+dfm_text_uk6 <- dfm(corp_text_uk6, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk6final <- head(dfm(corp_text_uk6, dictionary = power_dict_comp))
+
+#uk7
+uk7 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk7")
+docvarsuk7<-(uk7$doc_id)
+corp_text_uk7 <- corpus(uk7)
+dfm_text_uk7 <- dfm(corp_text_uk7, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk7final <- head(dfm(corp_text_uk7, dictionary = power_dict_comp))
+
+#uk8
+uk8 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/uk8")
+docvarsuk8<-(uk8$doc_id)
+corp_text_uk8 <- corpus(uk8)
+dfm_text_uk8 <- dfm(corp_text_uk8, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+uk8final <- head(dfm(corp_text_uk8, dictionary = power_dict_comp))
+
+#ukpower asum1 results
+ukpower <- rbind(uk1final, uk2final, uk3final, uk4final, uk6final, uk7final, uk8final)
+print(ukpower)
+textplot_wordcloud(ukpower)
+#ukpower data frame
+ukpowerdataframe <- as.data.frame(ukpower, row.names = NULL, 
+              document = docnames(ukpower), check.names = FALSE)
+write.csv(ukpowerdataframe, "/Users/willford/Desktop/Dissertation/R/diss/ukpower.csv", row.names = FALSE)
+
+#dictionary for British negotiation strategy
+negstrategy <- dictionary(list(policyobj = c("implementation", "period", "backstop", "irish sea", "good friday", "physical", "citizens", "border", "transition", "deal", "common market", "single market", "four freedoms", "tariffs", "security", "bilateral", "smooth", "farm", "fish"),
+                sovereignty = c("integrity", "independent", "union", "breakup", "voted for", "democracy", "national interest", "sovereign*", "influence", "control", "diplomatic", "order", "seat", "protect", "divorce", "restrict"),
+                mutualadvantage = c("partner", "benefit", "mutual", "creative", "practical", "share", "competition", "free trade", "shared", "differences", "balance", "resolution", "cooperation", "protect", "deep","special", "intelligence", "alliance")))
+test_dict_comp_results1 <- head(dfm(eu_corp_text, dictionary = negstrategy))
+test_dict_comp_results1
+  
+#negotiation strategy analysis
+uk9final <- head(dfm(corp_text_uk1, dictionary = negstrategy))
+uk10final <- head(dfm(corp_text_uk2, dictionary = negstrategy))
+uk11final <- head(dfm(corp_text_uk3, dictionary = negstrategy))
+uk12final <- head(dfm(corp_text_uk4, dictionary = negstrategy))
+uk13final <- head(dfm(corp_text_uk5, dictionary = negstrategy))
+uk14final <- head(dfm(corp_text_uk6, dictionary = negstrategy))
+uk15final <- head(dfm(corp_text_uk7, dictionary = negstrategy))
+uk16final <- head(dfm(corp_text_uk8, dictionary = negstrategy))
+uknegstrategy <- rbind(uk9final, uk10final, uk11final, uk12final, uk13final, uk14final, uk15final, uk16final)
+print(uknegstrategy)
+
+uknegstrategydataframe <- as.data.frame(uknegstrategy, row.names = NULL, 
+                                  document = docnames(uknegstrategy), check.names = FALSE)
+write.csv(uknegstrategydataframe, "/Users/willford/Desktop/Dissertation/R/diss/uknegstrategy.csv", row.names = FALSE)
+#negotiation plot 
+test_plot_negstrategy <- textstat_frequency(uknegstrategy, n = 3)
+test_plot_negstrategy$feature <- with(test_plot_negstrategy, reorder(feature, -frequency))
+ggplot(test_plot_negstrategy, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#overlay plot
+negstrategyoverlap <- textstat_frequency(uknegstrategy, n = 3)
+negstrategyoverlap$feature <- with(negstrategyoverlap, reorder(feature, -frequency))
+ggplot(negstrategyoverlap, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#dictionary for red lines
+
+redlines <- dictionary(list(position =c("afraid", "flexible", "open", "alternative", "fallback", "table", "rule out", "flexible", "strong", "stable"),
+                            altpolicy =c("no deal", "crash", "walk away", "WTO", "extension", "revoke")))
+#red lines analysis 
+uk17final <- head(dfm(corp_text_uk1, dictionary = redlines))
+uk18final <- head(dfm(corp_text_uk2, dictionary = redlines))
+uk19final <- head(dfm(corp_text_uk3, dictionary = redlines))
+uk20final <- head(dfm(corp_text_uk4, dictionary = redlines))
+uk21final <- head(dfm(corp_text_uk5, dictionary = redlines))
+uk22final <- head(dfm(corp_text_uk6, dictionary = redlines))
+uk23final <- head(dfm(corp_text_uk7, dictionary = redlines))
+uk24final <- head(dfm(corp_text_uk8, dictionary = redlines))
+ukredlines <- rbind(uk17final, uk18final, uk19final, uk20final, uk21final, uk22final, uk23final, uk24final)
+print(ukredlines)
+
+#red lines plot
+test_plot_redlines <- textstat_frequency(ukredlines, n = 2)
+test_plot_redlines$feature <- with(test_plot_redlines, reorder(feature, -frequency))
+ggplot(test_plot_redlines, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#bar plot test 
+
+test_plot_redlines <- textstat_frequency(ukredlines, n = 2)
+test_plot_redlines$feature <- with(test_plot_redlines, reorder(feature, -frequency))
+ggplot(test_plot_redlines, aes(x = feature, y = frequency)) +
+  geom_bar(stat = "identity", fill="#FF9999", colour="black") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+test_plot_ukpower <- textstat_frequency(ukpower, n = 4)
+test_plot_ukpower$feature <- with(test_plot_ukpower, reorder(feature, -frequency))
+ggplot(test_plot_ukpower, aes(x = feature, y = frequency, fill=feature,) +
+  geom_bar(stat = "identity", colour="black") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  scale_fill_brewer(direction = -1) + theme_dark()
+  
+  test_plot_ukpower <- textstat_frequency(ukpower, n = 4)
+  test_plot_ukpower$feature <- with(test_plot_ukpower, reorder(feature, -frequency))
+  ggplot(test_plot_ukpower, aes(x = feature, y = frequency, fill=feature) +
+           geom_histogram(stat = "identity", colour="black") 
+           theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+           scale_fill_brewer(direction = -1) + theme_dark()
+        
+#plot for negstrategy for most common actors - shows silences
+actornegstratplot <- data.frame(list(
+  document = rownames(uknegstrategy),
+  frequency = unname(as.matrix(uknegstrategy[ 'mutualadvantage']))
+))
+
+ggplot(actornegstratplot) + geom_count(aes(x=document,y=frequency)) +
+  theme(axis.text.x = element_text(angle=90, hjust=1))
+
+ggplot(uknegstrategydataframe, aes(policy))
+
+g <- ggplot(data=uknegstrategydataframe, aes(x=document, y=policyobj))
+g + geom_bar(aes(fill=class, stat = count), width = 0.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6))
+
+#dictionary for support
+supportsource <- dictionary(list(referendum =c("fulfil", "wishes", "population", "election", "june", "deliver", "voters", "general election", "referendum", "stand", "implement", "referendum", "voices", "heard"),
+                                 democracy =c("democracy", "uphold", "legitima*", "confidence", "trusted", "honour", "duty", "adverseries", "business", "leaders", "worldwide", "place in the world", "stand up", "values", "free trade", "unique", "pillar","international order")))
+
+#levsupport analysis
+uk25final <- head(dfm(corp_text_uk1, dictionary = supportsource))
+uk26final <- head(dfm(corp_text_uk2, dictionary = supportsource))
+uk27final <- head(dfm(corp_text_uk3, dictionary = supportsource))
+uk28final <- head(dfm(corp_text_uk4, dictionary = supportsource))
+uk29final <- head(dfm(corp_text_uk5, dictionary = supportsource))
+uk30final <- head(dfm(corp_text_uk6, dictionary = supportsource))
+uk31final <- head(dfm(corp_text_uk7, dictionary = supportsource))
+uk32final <- head(dfm(corp_text_uk8, dictionary = supportsource))
+uksupportsource <- rbind(uk25final, uk26final, uk27final, uk28final, uk29final, uk30final, uk31final, uk32final)
+
+#levsupport plot 
+test_plot_supportsource <- textstat_frequency(uksupportsource, n = 2)
+test_plot_supportsource$feature <- with(test_plot_supportsource, reorder(feature, -frequency))
+ggplot(test_plot_supportsource, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#European dictionaries
+
+eu_speeches_full <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches")
+View(eu_speeches_full)
+docvars_eu<-(eu_speeches_full$doc_id)
+summary(docvars_eu)
+
+#corpus from data 
+eu_corp_text <- corpus(eu_speeches_full)
+summary(eu_corp_text)
+
+#data cleaning and conversion to dfm 
+eu_dfm_text <- dfm(eu_corp_text, remove_numbers = TRUE, 
+                   stem = TRUE,
+                   remove_punct = TRUE,
+                   remove = stopwords("english"))
+summary(eu_dfm_text)
+
+
+#dictionary for eupower
+eupower_dict_comp <- dictionary(list(unity =c("contract", "share", "dreams", "peace", "solidarity", "prosperity", "values", "freedom", "democracy", "equality", "unit*", "benefit", "foundation", "collective", "proud", "community"),
+                                     brexitharming =c("prosperity", "race to the bottom", "third", "commons", "consequence", "lesson", "ideolog*", "lack", "privileged", "seperate", "insistent", "obligation"),
+                                     method =c("coherent", "orderly", "positions", "renegotiation", "default", "managed", "understand", "solution", "strategy", "unanimous", "intelligent", "constitution", "undercut", "procedure", "timeline"),
+                                     outsidethreats = c("dangerous", "fierce", "stable world", "order", "security", "rule of law", "strong", "borders", "unilateralist", "china", "russia", "capacity", "global", "neighbourhood")))
+#dictionary for eunegstrategy
+eunegstrategy_dict_comp <- dictionary(list(citizensrights =c("rights", "citizens", "settled", "live", "work", "study", "movement"), 
+                                           irishborder =c("ireland", "northern", "good friday", "hard", "border", "return", "backstop", "territory", "aligned", "peace", "reconciliation", "fragile"),
+                                           divorcebill = c("budget", "budgetary", "business", "financed", "projects", "bill"), 
+                                           fourfreedoms =c("preserve", "cake", "four", "freedoms", "seperate", "agenda", "pick", "choose", "single market", "integrity", "cherry")))
+
+#dictionary for red lines
+euredlines_dict_comp <- dictionary(list(nodeal =c("no deal", "orderly", "customs", "scenario", "major", "disruption", "measures", "unilaterally", "aviation", "financial services", "protect", "responsibility", "hard border"), 
+                                        ireland =c("peace", "reconciliation", "ireland", "avoid", "integrity", "solidarity", "membership", "benefits", "table", "equal")))
+                                                                       
+#dictionary for support
+eusupportsource_dict_comp <- dictionary(list(commoninterests =c("economic", "single market", "free trade", "agricultural", "interests", "movement", "goods", "jobs", "industry", "open", "investment", "fisheries", "competition"),
+                                             commonvalues =c("history", "freedom", "shared", "prosperity", "proud", "together", "community", "dreams", "contract", "equality"),
+                                             commonprocess =c("coherent", "orderly", "positions", "renegotiation", "default", "managed", "solution", "strategy", "unanimous", "intelligent", "constitution", "undercut", "procedure", "timeline")))
+
+#eupower dictionaries
+eu1 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches/eu1")
+docvarseu1<-(eu1$doc_id)
+corp_text_eu1 <- corpus(eu1)
+dfm_text_eu1 <- dfm(corp_text_eu1, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+eu1final <- head(dfm(corp_text_eu1, dictionary = eupower_dict_comp))
+print(eu1final)
+
+eu2 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches/eu2")
+docvarseu2<-(eu2$doc_id)
+corp_text_eu2 <- corpus(eu2)
+dfm_text_eu2 <- dfm(corp_text_eu2, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+eu2final <- head(dfm(corp_text_eu2, dictionary = eupower_dict_comp))
+
+eu3 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches/eu3")
+docvarseu3<-(eu3$doc_id)
+corp_text_eu3 <- corpus(eu3)
+dfm_text_eu3 <- dfm(corp_text_eu3, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+eu3final <- head(dfm(corp_text_eu3, dictionary = eupower_dict_comp))
+
+eu4 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches/eu4")
+docvarseu4<-(eu4$doc_id)
+corp_text_eu4 <- corpus(eu4)
+dfm_text_eu4 <- dfm(corp_text_eu4, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+eu4final <- head(dfm(corp_text_eu4, dictionary = eupower_dict_comp))
+
+eu5 <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/eu_speeches/eu5")
+docvarseu5<-(eu5$doc_id)
+corp_text_eu5 <- corpus(eu5)
+dfm_text_eu5 <- dfm(corp_text_eu5, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
+eu5final <- head(dfm(corp_text_eu5, dictionary = eupower_dict_comp))
+
+eupower <- rbind(eu1final, eu2final, eu3final, eu4final, eu5final)
+print(eupower)
+
+
+#eunegstrategy dictionary
+eu6final <- head(dfm(corp_text_eu1, dictionary = eunegstrategy_dict_comp))
+eu7final <- head(dfm(corp_text_eu2, dictionary = eunegstrategy_dict_comp))
+eu8final <- head(dfm(corp_text_eu3, dictionary = eunegstrategy_dict_comp))
+eu9final <- head(dfm(corp_text_eu4, dictionary = eunegstrategy_dict_comp))
+eu10final <- head(dfm(corp_text_eu5, dictionary = eunegstrategy_dict_comp))
+eunegstrategy <- rbind(eu6final, eu7final, eu8final, eu9final, eu10final)
+print(eunegstrategy)
+
+euplotdata <- data.frame(list(document = rownames(eunegstrategy), frequency = unname(as.matrix(eunegstrategy['fourfreedoms']))))
+data.frame(list(eunegstrategy), frequency = eunegstrategy['fourfreedoms'])
+eunegstrategydataframe <- ggplot(euactornegstratplot) + geom_count(aes(x=document,y=frequency)) +
+  theme(axis.text.x = element_text(angle=90, hjust=1))
+
+ggplot(eunegstrategydataframe, aes(fourfreedoms))
+
+eunegstrategyggplot <- ggplot(data=eunegstrategydataframe, aes(x=document, y=fourfreedoms))
+eunegstrategyggplot + geom_bar(aes(fill=class, stat = count), width = 0.5) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6))
+
+
+#euredlines dictionary 
+eu11final <- head(dfm(corp_text_eu1, dictionary = euredlines_dict_comp))
+eu12final <- head(dfm(corp_text_eu2, dictionary = euredlines_dict_comp))
+eu13final <- head(dfm(corp_text_eu3, dictionary = euredlines_dict_comp))
+eu14final <- head(dfm(corp_text_eu4, dictionary = euredlines_dict_comp))
+eu15final <- head(dfm(corp_text_eu5, dictionary = euredlines_dict_comp))
+euredlines <- rbind(eu11final, eu12final, eu13final, eu14final, eu15final)
+
+#eusupportsource dictionary 
+eu16final <- head(dfm(corp_text_eu1, dictionary = eusupportsource_dict_comp))
+eu17final <- head(dfm(corp_text_eu2, dictionary = eusupportsource_dict_comp))
+eu18final <- head(dfm(corp_text_eu3, dictionary = eusupportsource_dict_comp))
+eu19final <- head(dfm(corp_text_eu4, dictionary = eusupportsource_dict_comp))
+eu20final <- head(dfm(corp_text_eu5, dictionary = eusupportsource_dict_comp))
+eusupportsource <- rbind(eu16final, eu17final, eu18final, eu19final, eu20final)
+
+eupoweroverlap <- textstat_frequency(eupower, n = 4)
+eupoweroverlap$feature <- with(eupoweroverlap, reorder(feature, -frequency))
+ggplot(eupoweroverlap, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+eunegstrategyoverlap <- textstat_frequency(eunegstrategy, n = 4)
+eunegstrategyoverlap$feature <- with(eunegstrategyoverlap, reorder(feature, -frequency))
+ggplot(eunegstrategyoverlap, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+eusupportsourceoverlap <- textstat_frequency(eusupportsource, n = 3)
+eusupportsourceoverlap$feature <- with(eusupportsourceoverlap, reorder(feature, -frequency))
+ggplot(eusupportsourceoverlap, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+euredlinesoverlap <- textstat_frequency(euredlines, n = 2)
+euredlinesoverlap$feature <- with(euredlineseoverlap, reorder(feature, -frequency))
+ggplot(euredlinesoverlap, aes(x = feature, y = frequency)) +
+  geom_point() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+#Withdrawal Agreement (WA) prep
+waread <- readtext::readtext("/Users/willford/Desktop/Dissertation/R/diss/wa_final.pdf")
+docvarswaread <- (waread$doc_id)
+wa_corpus <- corpus(waread)
+summary(wa_corpus)
+#data cleaning and conversion to dfm uk1
+wa_dfm <- dfm(wa_corpus, remove_numbers = TRUE, 
+                    stem = TRUE,
+                    remove_punct = TRUE,
+                    remove = stopwords("english"))
